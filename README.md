@@ -1,11 +1,11 @@
-# Claudesidian: Claude Code + Obsidian Starter Kit
+# Claudesidian: OpenCode + Obsidian Starter Kit
 
-Turn your Obsidian vault into an AI-powered second brain using Claude Code.
+Turn your Obsidian vault into an AI-powered second brain using OpenCode.
 
 ## What is this?
 
 This is a pre-configured Obsidian vault structure designed to work seamlessly
-with Claude Code, enabling you to:
+with OpenCode, enabling you to:
 
 - Use AI as a thinking partner, not just a writing assistant
 - Organize knowledge using the PARA method
@@ -33,15 +33,15 @@ cd my-vault
 
 1. Click "Code" → "Download ZIP" on GitHub
 2. Extract to your desired location
-3. Open the folder in Claude Code
+3. Open the folder in OpenCode
 
 ### 2. Run the Setup Wizard
 
 ```bash
-# Start Claude Code in the directory
-claude
+# Start OpenCode in the directory
+opencode
 
-# Run the interactive setup wizard (in Claude Code)
+# Run the interactive setup wizard (in OpenCode)
 /init-bootstrap
 ```
 
@@ -63,11 +63,11 @@ This will:
 
 - Download [Obsidian](https://obsidian.md)
 - Open vault from the claudesidian folder
-- This gives you a visual interface alongside Claude Code
+- This gives you a visual interface alongside OpenCode
 
 ### 4. Your First Session
 
-Tell Claude Code:
+Tell OpenCode:
 
 ```
 I'm starting a new project about [topic].
@@ -76,7 +76,7 @@ Please search my vault for any relevant existing notes,
 then help me explore this topic by asking questions.
 ```
 
-Or use one of the pre-configured commands (in Claude Code):
+Or use one of the pre-configured commands (in OpenCode):
 
 ```
 /thinking-partner   # For collaborative exploration
@@ -106,7 +106,7 @@ claudesidian/
 
 **Thinking Mode** (Research & Exploration):
 
-- Claude asks questions to understand your goals
+- AI asks questions to understand your goals
 - Searches existing notes for relevant content
 - Helps make connections between ideas
 - Maintains a log of insights and progress
@@ -139,7 +139,7 @@ claudesidian/
 - Completed projects with their outputs
 - Old notes no longer relevant
 
-## Claude Code Commands
+## OpenCode Commands
 
 Pre-configured AI assistants ready to use:
 
@@ -155,11 +155,11 @@ Pre-configured AI assistants ready to use:
 - `install-claudesidian-command` - Install shell command to launch vault from
   anywhere
 
-Run with: `/[command-name]` in Claude Code
+Run with: `/[command-name]` in OpenCode
 
 ### Staying Updated with `/upgrade`
 
-Claudesidian automatically checks for updates when you start Claude Code and
+Claudesidian automatically checks for updates when you start OpenCode and
 will remind you to run `/upgrade` when new features are available.
 
 The upgrade command intelligently merges new features while preserving your
@@ -195,17 +195,17 @@ customizations:
 
 ## Vision & Document Analysis (Optional)
 
-With [Google Gemini](https://ai.google.dev/) MCP configured, Claude Code can
+With [Google Gemini](https://ai.google.dev/) MCP configured, OpenCode can
 process your attachments directly without having to describe them. This means:
 
-- **Direct image analysis**: Claude sees the actual image, not your description
+- **Direct image analysis**: AI sees the actual image, not your description
 - **PDF text extraction**: Full document text without copy-pasting
 - **Bulk processing**: Analyze multiple screenshots or documents at once
 - **Smart organization**: Auto-generate filenames based on image content
 - **Comparison tasks**: Compare before/after screenshots, designs, etc.
 
 **Why this matters**: Instead of describing "a screenshot showing an error
-message", Claude Code directly sees and reads the error. Perfect for debugging
+message", OpenCode directly sees and reads the error. Perfect for debugging
 UI issues, analyzing charts, or processing scanned documents.
 
 **Getting a Gemini API key:**
@@ -230,8 +230,8 @@ fetch and save full web content directly to your vault. This means:
 - **Clean markdown**: Web pages converted to readable, searchable markdown
 - **Permanent archive**: Your research stays in your vault forever
 
-**Why this matters**: Instead of Claude reading a webpage and summarizing it
-(losing detail), the scripts save the FULL text. Claude can then search and
+**Why this matters**: Instead of AI reading a webpage and summarizing it
+(losing detail), the scripts save the FULL text. OpenCode can then search and
 analyze thousands of saved articles without hitting context limits. Perfect for
 research projects, documentation archives, or building a knowledge base.
 
@@ -270,7 +270,7 @@ Run these with `pnpm`:
 Install a shell command to launch your vault from any directory:
 
 ```bash
-# In Claude Code, run:
+# In OpenCode, run:
 /install-claudesidian-command
 ```
 
@@ -317,11 +317,11 @@ Best practices:
 2. Install Tailscale for secure VPN access
 3. Clone your vault to the server
 4. Use Termius or similar SSH client on mobile
-5. Run Claude Code remotely
+5. Run OpenCode remotely
 
 ### Custom Commands
 
-Create specialized commands by saving instructions in `.claude/commands/`:
+Create specialized commands by saving instructions in `.opencode/command/`:
 
 **Research Assistant** (`06_Metadata/Agents/research-assistant.md`):
 
@@ -346,9 +346,9 @@ You are a research assistant.
 
 ## Troubleshooting
 
-### Claude Code can't find my notes
+### OpenCode can't find my notes
 
-- Make sure you're running Claude Code from the vault root directory
+- Make sure you're running OpenCode from the vault root directory
 - Check file permissions
 - Verify markdown files have `.md` extension
 
@@ -391,7 +391,7 @@ better with everyone's input.
 
 ### What We're Looking For
 
-- **New commands**: Useful Claude Code commands for common workflows
+- **New commands**: Useful OpenCode commands for common workflows
 - **New agents**: Specialized agents for specific tasks
 - **Documentation improvements**: Better explanations, examples, or guides
 - **Bug fixes**: Found something broken? Fix it!
@@ -436,7 +436,7 @@ makes this better for everyone!
 
 - [Obsidian Documentation](https://help.obsidian.md)
 - [PARA Method](https://fortelabs.com/blog/para/)
-- [Claude Code Documentation](https://claude.ai/docs)
+- [OpenCode Documentation](https://opencode.ai/docs)
 
 ## Inspiration
 

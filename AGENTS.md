@@ -21,7 +21,7 @@ tests:
 
 - Test MCP servers: `node .claude/mcp-servers/<server-name>.mjs`
 - Test shell scripts: `bash .scripts/<script-name>.sh`
-- Test commands: Use Claude Code to execute `/command-name` interactively
+- Test commands: Use OpenCode to execute `/command-name` interactively
 
 ## Code Style Guidelines
 
@@ -87,16 +87,37 @@ tests:
 - Hardcode paths: `00_Inbox/`, `01_Projects/`, etc.
 - Quote all paths in scripts: `"00_Inbox/$filename"`
 
-### Command/Agent Files (.md files in .claude/)
+### Command/Agent Files (.md files in .opencode/command/)
 
 #### Structure
 
+- Frontmatter with `agent` field specifying which agent profile to use
 - H1 title: `# Command Name`
 - Brief description of purpose
 - Use H2 for major sections: `## Core Behaviors`, `## Workflow`, `## Tips`
 - Use code blocks: ` ```markdown `, ` ```bash `
 - Numbered lists for sequential steps
 - Bullet points for general guidelines
+
+#### Frontmatter Format
+
+```markdown
+---
+agent: [agent-name]
+description: [One-line description]
+argument-hint: [Optional: what user should provide]
+---
+```
+
+#### Agent Profiles
+
+- **bootstrap**: Full access for setup and system operations
+- **thinking-partner**: Read-only for exploration
+- **research-assistant**: Read/write with web access (ask)
+- **assistant**: Standard permissions with safety checks
+- **read-only**: Minimal permissions for safe review
+
+See `PERMISSION-SYSTEM.md` for detailed permission information.
 
 #### Tone
 
@@ -187,5 +208,87 @@ check_command() {
 2. Run `pnpm lint` to auto-fix issues
 3. Test shell scripts manually: `bash .scripts/script-name.sh`
 4. Test MCP servers: `node .claude/mcp-servers/server-name.mjs`
-5. Test core functionality in Claude Code with actual commands
+5. Test core functionality in OpenCode with actual commands
 6. Verify file paths match underscore convention (no spaces)
+
+## OpenCode-Specific Guidelines
+
+### Configuration
+
+OpenCode uses `opencode.jsonc` for configuration instead of `.claude/settings.json`:
+
+- **Agent Profiles**: Defined in `opencode.jsonc` with permission rules
+- **MCP Servers**: Configured in `opencode.jsonc` with command strings
+- **Plugins**: Auto-detected from `.opencode/plugin/` directory
+- **Commands**: Auto-detected from `.opencode/command/` directory
+
+### Command Migration from Claude Code
+
+When migrating commands from Claude Code to OpenCode:
+
+1. **Move file**: `.claude/commands/[name].md` → `.opencode/command/[name].md`
+2. **Add frontmatter**: Include `agent` field specifying which agent profile to use
+3. **Update references**: Change `claude run` → `/command-name` (OpenCode TUI)
+4. **Update MCP commands**: Change `claude mcp add` → `opencode mcp add`
+5. **Preserve content**: Keep all instructions and workflows intact
+
+### Permission System
+
+OpenCode uses a permission-based system with three levels:
+
+- **allow**: Agent can use tool without asking
+- **ask**: Agent must ask user before using tool (default)
+- **deny**: Agent cannot use tool at all
+
+Permissions are configured:
+- Globally in `opencode.jsonc` under `permission` object
+- Per-agent in `agent` object with overrides
+- Pattern matching for bash commands (e.g., `"git *": "allow"`)
+
+See `PERMISSION-SYSTEM.md` for complete documentation.
+
+### Plugin System
+
+OpenCode plugins replace Claude Code hooks:
+
+- **Location**: `.opencode/plugin/` directory
+- **Format**: TypeScript files exporting a Plugin function
+- **Events**: Handle `session.created` and other events
+- **API**: Use `$` API for shell commands
+
+Example plugin structure:
+
+```typescript
+import type { Plugin } from '@opencode-ai/core'
+
+export default function sessionHooks(): Plugin {
+  return {
+    name: 'session-hooks',
+    on: {
+      'session.created': async ({ $ }) => {
+        // First-run detection, welcome message, etc.
+      }
+    }
+  }
+}
+```
+
+### Testing Commands
+
+To test OpenCode commands:
+
+1. Start OpenCode: `opencode` (or `opencode <agent-name>`)
+2. Run command: `/command-name`
+3. Verify agent permissions are enforced correctly
+4. Test with different agent profiles if needed
+
+### Windows Compatibility
+
+On Windows, scripts require:
+
+- **Git Bash** or **WSL** for shell scripts
+- Path handling uses forward slashes (works in Git Bash)
+- MCP servers work with Node.js on Windows
+- Environment variables set in shell profile
+
+See `.scripts/README.md` for Windows-specific notes.
