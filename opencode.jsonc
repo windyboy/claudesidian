@@ -1,7 +1,63 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-
-  // Permission system (global and agent-specific)
+  "agent": {
+    "bootstrap": {
+      "description": "Full-access bootstrap agent for setup and initialization",
+      "permission": {
+        "bash": "allow",
+        "write": "allow",
+        "edit": "allow",
+        "read": "allow"
+      },
+      "options": {}
+    },
+    "thinking-partner": {
+      "description": "Read-only thinking assistant for collaborative exploration",
+      "permission": {
+        "bash": "ask",
+        "write": "deny",
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "read": "allow"
+      },
+      "options": {}
+    },
+    "research-assistant": {
+      "description": "Research agent with web access for information gathering",
+      "permission": {
+        "bash": "ask",
+        "write": "allow",
+        "edit": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "read": "allow"
+      },
+      "options": {}
+    },
+    "assistant": {
+      "description": "Standard assistant for daily tasks and workflows",
+      "permission": {
+        "bash": "ask",
+        "write": "allow",
+        "edit": "allow",
+        "webfetch": "ask",
+        "read": "allow"
+      },
+      "options": {}
+    },
+    "read-only": {
+      "description": "Analysis-only agent with minimal permissions",
+      "permission": {
+        "bash": "deny",
+        "write": "deny",
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "read": "allow"
+      },
+      "options": {}
+    }
+  },
   "permission": {
     "*": "ask",
     "bash": {
@@ -18,13 +74,13 @@
       "ls": "allow",
       "cat": "allow",
       "find": "allow",
-      "date": "allow",
+      "date": "allow"
     },
     "read": {
       "*": "allow",
       "*.env": "deny",
       ".env": "deny",
-      "**/.env": "deny",
+      "**/.env": "deny"
     },
     "write": "allow",
     "edit": {
@@ -33,87 +89,8 @@
       "*.md": "allow",
       "*.mjs": "allow",
       "*.sh": "allow",
-      "*.json": "allow",
-    },
-    "bash:git": {
-      "*": "allow",
-    },
-    "bash:pnpm": {
-      "*": "allow",
-    },
+      "*.json": "allow"
+    }
   },
-
-  // Plugin system (singular key, not "plugins")
-  "plugin": ["session-hooks"],
-
-  // MCP server configuration
-  "mcp": {
-    "gemini-vision": {
-      "type": "local",
-      "command": ["node", ".claude/mcp-servers/gemini-vision.mjs"],
-      "environment": {
-        "GEMINI_API_KEY": "{env:GEMINI_API_KEY}",
-      },
-      "enabled": true,
-    },
-  },
-
-  // Agent-specific overrides
-  "agent": {
-    "bootstrap": {
-      "description": "Full-access bootstrap agent for setup and initialization",
-      "permission": {
-        "bash": "allow",
-        "write": "allow",
-        "edit": "allow",
-        "read": "allow",
-      },
-    },
-    "thinking-partner": {
-      "description": "Read-only thinking assistant for collaborative exploration",
-      "permission": {
-        "bash": "ask",
-        "write": "deny",
-        "edit": "deny",
-        "webfetch": "deny",
-        "websearch": "deny",
-        "read": "allow",
-      },
-    },
-    "research-assistant": {
-      "description": "Research agent with web access for information gathering",
-      "permission": {
-        "bash": "ask",
-        "write": "allow",
-        "edit": "allow",
-        "webfetch": "allow",
-        "websearch": "allow",
-        "read": "allow",
-      },
-    },
-    "assistant": {
-      "description": "Standard assistant for daily tasks and workflows",
-      "permission": {
-        "bash": "ask",
-        "write": "allow",
-        "edit": "allow",
-        "webfetch": "ask",
-        "read": "allow",
-      },
-    },
-    "read-only": {
-      "description": "Analysis-only agent with minimal permissions",
-      "permission": {
-        "bash": "deny",
-        "write": "deny",
-        "edit": "deny",
-        "webfetch": "deny",
-        "websearch": "deny",
-        "read": "allow",
-      },
-    },
-  },
-
-  // Command directory
-  "command": ".opencode/command",
+  "$schema": "https://opencode.ai/config.json"
 }
