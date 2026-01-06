@@ -1,24 +1,184 @@
 # Migration Tracking
 
-**Branch:** feature/opencode-migration  
-**Started:** January 6, 2026  
-**Status:** Phase 2 - Permission System Refinement
+**Branch:** feature/opencode-migration
+**Started:** January 6, 2026
+**Status:** Phase 2 - Permission System Refinement (75% Complete)
 
 ---
 
 ## Progress Summary
 
-| Phase                       | Status         | Completion |
-| --------------------------- | -------------- | ---------- |
-| Phase 0: Pre-Migration      | 🟢 Complete    | 100%       |
-| Phase 1: Core Configuration | 🟢 Complete    | 100%       |
-| Phase 2: Permission System  | ⚪ Not Started | 0%         |
-| Phase 3: P0 Commands        | ⚪ Not Started | 0%         |
-| Phase 4: P1-P2 Commands     | ⚪ Not Started | 0%         |
-| Phase 5: GitHub Action      | ⚪ Not Started | 0%         |
-| Phase 6: Windows Testing    | ⚪ Not Started | 0%         |
-| Phase 7: Documentation      | ⚪ Not Started | 0%         |
-| Phase 8: Testing & Cleanup  | ⚪ Not Started | 0%         |
+| Phase                       | Status               | Completion |
+| --------------------------- | -------------------- | ---------- |
+| Phase 0: Pre-Migration      | 🟢 Complete          | 100%       |
+| Phase 1: Core Configuration | 🟢 Complete          | 100%       |
+| Phase 2: Permission System  | 🟡 In Progress (75%) | 75%        |
+| Phase 3: P0 Commands        | ⚪ Not Started       | 0%         |
+| Phase 4: P1-P2 Commands     | ⚪ Not Started       | 0%         |
+| Phase 5: GitHub Action      | ⚪ Not Started       | 0%         |
+| Phase 6: Windows Testing    | ⚪ Not Started       | 0%         |
+| Phase 7: Documentation      | ⚪ Not Started       | 0%         |
+| Phase 8: Testing & Cleanup  | ⚪ Not Started       | 0%         |
+
+---
+
+## Current Status Summary
+
+**Date:** January 6, 2026
+**Branch:** feature/opencode-migration
+**Status:** Phase 1 Complete ✅ - Ready for Phase 2
+
+### What We've Accomplished
+
+**Phase 0: Pre-Migration Preparation (100% Complete)**
+
+- Created migration branch: `feature/opencode-migration`
+- Installed OpenCode CLI v1.1.3 via `bun add -g opencode-ai`
+- Created migration tracking document (this file)
+- Backed up Claude Code configuration to `04_Archive/Claude-Code-Backup-20260106/`
+- Created `OPENCODE-MIGRATION-PLAN.md` - Comprehensive 8-phase migration plan (4-8 weeks)
+- Created `AGENTS.md` - Agent development guidelines for OpenCode
+- Committed initial migration documents
+
+**Phase 1: Core Configuration (100% Complete)**
+
+- Created `opencode.jsonc` - Main OpenCode configuration file with:
+  - Global permission system (ask/allow/deny)
+  - 5 agent profiles: bootstrap, thinking-partner, research-assistant, assistant, read-only
+  - MCP server structure for gemini-vision
+  - Note: MCP environment variables configured via CLI, not config file
+- Created Plugin System:
+  - `.opencode/plugin/session-hooks.ts` - Replaces Claude Code hooks
+    - First-run detection (FIRST_RUN file check)
+    - Welcome message display
+    - Auto npm update checking
+  - `.opencode/plugin/package.json` - Plugin package definition
+  - `.opencode/plugin/README.md` - Plugin documentation
+- Fixed JSON Validation Issues:
+  - Removed all trailing commas
+  - Changed MCP `command` from array to string format
+  - Removed MCP `environment` object (use CLI auth instead)
+  - Removed plugin array (auto-detection works)
+  - Removed command directory field (auto-detected from `.opencode/command/`)
+- Verified Configuration:
+  - OpenCode CLI starts successfully
+  - Configuration loads without errors
+  - TUI interface displays correctly
+
+### Git Commits Made
+
+1. Initial migration plan and tracking documents
+2. Phase 1 completion: core configuration and plugin system
+
+### Working Configuration
+
+- `opencode.jsonc` - Validated and working
+- `.opencode/plugin/session-hooks.ts` - Implemented
+- MCP server configured (environment via CLI)
+
+### Key Technical Decisions
+
+1. **OpenCode Configuration Format:**
+   - No trailing commas in JSON
+   - MCP command as string, not array: `"command": "node .claude/mcp-servers/gemini-vision.mjs"`
+   - MCP environment variables configured via `opencode mcp auth`, not config file
+   - Plugins auto-detected from `.opencode/plugin/` directory
+   - Commands auto-detected from `.opencode/command/` directory
+
+2. **Permission System Design:**
+   - Global `permission` object with ask/allow/deny
+   - Agent-specific overrides in `agent` object
+   - Pattern matching for bash commands: `"git *": "allow"`
+   - 5 agent profiles defined:
+     - **bootstrap**: Full access, all tools allowed
+     - **thinking-partner**: Read-only with search capabilities
+     - **research-assistant**: Web access via firecrawl
+     - **assistant**: Standard permissions with ask for risky operations
+     - **read-only**: Minimal permissions, mostly read access
+
+3. **Plugin System:**
+   - TypeScript files in `.opencode/plugin/`
+   - Export Plugin function with event handlers
+   - Use `$` API for shell commands
+   - Handle `session.created` event for hooks
+
+4. **MCP Integration:**
+   - Server defined in config with command string
+   - Environment variables managed via `opencode mcp auth`
+   - Command: `opencode mcp add gemini-vision <url>`
+
+### Files Created/Modified
+
+**New Files:**
+
+```
+OPENCODE-MIGRATION-PLAN.md
+MIGRATION_TRACKING.md
+AGENTS.md
+opencode.jsonc
+.opencode/plugin/session-hooks.ts
+.opencode/plugin/package.json
+.opencode/plugin/README.md
+04_Archive/Claude-Code-Backup-20260106/
+```
+
+**Files Not Yet Created:**
+
+```
+.opencode/command/ (directory - will be created in Phase 3)
+.open-mcp-auth/ (MCP auth state - managed by CLI)
+```
+
+### Next Phase (Phase 2: Permission System Refinement)
+
+**Immediate Tasks:**
+
+1. Analyze all 17 command files for tool usage
+2. Create tool usage matrix
+3. Map commands to appropriate agent profiles
+4. Refine permission rules based on actual command needs
+5. Test permission enforcement
+
+**Commands to Analyze (17 total):**
+
+**P0 Commands (Phase 3 - Critical Path):**
+
+1. `thinking-partner.md` - Core reasoning assistance
+2. `research-assistant.md` - Information gathering
+3. `init-bootstrap.md` - Setup wizard
+4. `daily-review.md` - Daily workflow
+5. `create-command.md` - Command creation
+
+**P1 Commands (Phase 4 - High Priority):** 6. `inbox-processor.md` - Inbox management 7. `pull-request.md` - PR creation assistance 8. `release.md` - Release workflow 9. `weekly-synthesis.md` - Weekly review 10. `upgrade.md` - Update management 11. `add-frontmatter.md` - Metadata addition 12. `download-attachment.md` - Attachment handling
+
+**P2 Commands (Phase 4 - Medium Priority):** 13. `de-ai-ify.md` - Content transformation 14. `install-claudesidian-command.md` - Installation 15. `task-manager.md` - Task tracking 16. `template-manager.md` - Template system 17. `vault-stats.md` - Analytics
+
+### Migration Plan Reference
+
+**Total Timeline:** 4-8 weeks
+**Critical Path:** Phase 1 → 2 → 3 → 5 → 8
+
+**Phase Breakdown:**
+
+- Phase 0: Pre-Migration (Complete ✅)
+- Phase 1: Core Configuration (Complete ✅)
+- Phase 2: Permission System Refinement (Next - 0%)
+- Phase 3: P0 Commands (Week 2-3)
+- Phase 4: P1-P2 Commands (Week 3-4)
+- Phase 5: GitHub Action (Week 4-5)
+- Phase 6: Windows Testing (Week 5-6)
+- Phase 7: Documentation (Week 6-7)
+- Phase 8: Testing & Cleanup (Week 7-8)
+
+### Rollback Point
+
+**Last Safe Commit:** `e5f7a9a` - "feat(Phase1): complete core configuration"
+
+**Rollback if needed:**
+
+```bash
+git checkout e5f7a9a
+```
 
 ---
 
@@ -128,25 +288,129 @@
 
 ## Phase 2: Permission System Refinement
 
+### Tool Usage Matrix
+
+**Analysis Date:** January 6, 2026
+
+**Commands Analyzed:** 14 (of 17 listed in plan)
+
+- 3 files not found: task-manager.md, template-manager.md, vault-stats.md
+
+#### Tool Usage by Command
+
+| Command                      | Read | Write | Edit | Bash | Glob | Grep | WebFetch | MCP | Task | MultiEdit |
+| ---------------------------- | ---- | ----- | ---- | ---- | ---- | ---- | -------- | --- | ---- | --------- |
+| thinking-partner             | ✅   | ❌    | ❌   | ❌   | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| research-assistant           | ✅   | ❌    | ❌   | ❌   | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| init-bootstrap               | ✅   | ✅    | ❌   | ✅   | ❌   | ❌   | ✅       | ❌  | ✅   | ✅        |
+| daily-review                 | ✅   | ❌    | ❌   | ❌   | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| create-command               | ✅   | ✅    | ✅   | ⚠️\* | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| inbox-processor              | ✅   | ❌    | ❌   | ❌   | ✅   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| pull-request                 | ✅   | ❌    | ❌   | ✅   | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| release                      | ✅   | ✅    | ✅   | ✅   | ❌   | ✅   | ❌       | ❌  | ❌   | ✅        |
+| weekly-synthesis             | ✅   | ❌    | ❌   | ❌   | ✅   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| upgrade                      | ✅   | ✅    | ✅   | ✅   | ✅   | ✅   | ✅       | ❌  | ❌   | ✅        |
+| add-frontmatter              | ✅   | ✅    | ✅   | ❌   | ✅   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| download-attachment          | ✅   | ✅    | ❌   | ✅   | ❌   | ❌   | ❌       | ✅  | ❌   | ❌        |
+| de-ai-ify                    | ✅   | ✅    | ✅   | ❌   | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+| install-claudesidian-command | ✅   | ✅    | ❌   | ✅   | ❌   | ❌   | ❌       | ❌  | ❌   | ❌        |
+
+**⚠️ Note:** create-command has restricted Bash access: `Bash(ls:*, mkdir:*)` only
+
+#### Tool Usage Patterns
+
+**Tools Used by Commands:**
+
+- **Read**: 14/14 (100%)
+- **Write**: 9/14 (64%)
+- **Edit**: 7/14 (50%)
+- **Bash**: 7/14 (50%)
+- **Glob**: 5/14 (36%)
+- **Grep**: 2/14 (14%)
+- **WebFetch**: 2/14 (14%)
+- **MCP**: 1/14 (7%) - gemini-vision
+- **Task**: 1/14 (7%)
+- **MultiEdit**: 3/14 (21%)
+
+#### Command Categories by Tool Needs
+
+**🟢 Read-Only (No Bash/Write):**
+
+- thinking-partner
+- research-assistant
+- daily-review
+- weekly-synthesis
+- inbox-processor
+
+**🟡 Standard Read+Write (No Bash):**
+
+- add-frontmatter
+- de-ai-ify
+
+**🟠 Full Access (Read+Write+Edit+Bash):**
+
+- init-bootstrap
+- release
+- upgrade
+- pull-request
+- download-attachment
+- install-claudesidian-command
+
+**🔵 Restricted Bash:**
+
+- create-command (limited to ls, mkdir)
+
+#### Command to Agent Mapping
+
+Based on tool usage, commands map to agents as follows:
+
+**read-only agent:**
+
+- thinking-partner
+- research-assistant
+- daily-review
+- weekly-synthesis
+- inbox-processor
+
+**assistant agent:**
+
+- add-frontmatter
+- de-ai-ify
+
+**bootstrap agent:**
+
+- init-bootstrap
+- release
+- upgrade
+- pull-request
+- download-attachment
+- install-claudesidian-command
+- create-command
+
+**research-assistant agent:**
+
+- (commands with WebFetch but not full bash access)
+- (no commands fit this exact profile yet)
+
 ### Tasks
 
-#### 2.1 Command Analysis
+#### 2.1 Command Analysis ✅ COMPLETE
 
-- [ ] Analyze all 17 command files for tool usage
-- [ ] Create tool usage matrix
-- [ ] Identify unique permission requirements per command
+- [x] Analyze all 14 command files for tool usage
+- [x] Create tool usage matrix
+- [x] Identify unique permission requirements per command
 
-#### 2.2 Agent Profile Design
+#### 2.2 Agent Profile Design ✅ COMPLETE
 
-- [ ] Define 4-6 agent profiles based on security needs
-- [ ] Create detailed permission matrix per agent
-- [ ] Document agent responsibilities and use cases
-- [ ] Map commands to agents
+- [x] Define 5 agent profiles based on security needs
+- [x] Create detailed permission matrix per agent (PERMISSION-SYSTEM.md)
+- [x] Document agent responsibilities and use cases (PERMISSION-SYSTEM.md)
+- [x] Map commands to agents (initial mapping created)
 
-#### 2.3 Permission Rules Implementation
+#### 2.3 Permission Rules Implementation ✅ COMPLETE
 
-- [ ] Implement global permissions in `opencode.jsonc`
-- [ ] Implement agent-specific overrides
+- [x] Implement global permissions in `opencode.jsonc`
+- [x] Implement agent-specific overrides
 - [ ] Test pattern matching for all allowed commands
 - [ ] Verify deny rules work correctly
 
@@ -157,6 +421,49 @@
 - [ ] Verify `allow` rules work for permitted operations
 - [ ] Verify `deny` rules block unauthorized tools
 - [ ] Document permission edge cases
+
+### Notes
+
+**January 6, 2026 - Phase 2 Progress (75%):**
+
+- Created comprehensive tool usage matrix for all 14 commands
+- Created PERMISSION-SYSTEM.md with detailed documentation:
+  - 5 agent profiles with specific permissions
+  - Tool descriptions and usage patterns
+  - Security best practices
+  - Common command mappings
+- Updated opencode.jsonc with refined permissions:
+  - **bootstrap agent**: All tools allowed, bash patterns for git/npm/file ops
+  - **thinking-partner agent**: Read-only, Glob allowed, no bash
+  - **research-assistant agent**: Read+Write+Edit+Glob, bash for downloads only
+  - **assistant agent**: Read+Write+Edit+Glob, ask for bash/web
+  - **read-only agent**: Read+Glob only, no write/edit/bash
+- Added comprehensive bash permission patterns:
+  - Git operations (status, diff, log, add, commit, push, pull, checkout, branch, tag)
+  - Package managers (npm, pnpm)
+  - File operations (ls, cat, find, mkdir, cp, mv)
+  - Search tools (grep)
+  - Safe operations (date, pwd, echo, which)
+- Added file permission patterns:
+  - Denied: .env files, \*.pem files
+  - Ask: \*.pem files
+  - Allowed: _.md, _.mjs, _.sh, _.json, _.ts, _.tsx, \*.js
+- Configured tool permissions:
+  - Glob, Grep: allow (safe operations)
+  - MultiEdit: ask (powerful tool)
+  - Task: ask (sub-agent)
+  - WebFetch: ask (network access)
+  - Write, Edit: ask (file modifications)
+- OpenCode CLI loads configuration successfully
+- Remaining work: Test permissions with actual commands
+
+**Key Decisions:**
+
+1. Research assistant renamed to maintain consistency: The agent profile exists but no commands map to it directly
+2. thinking-partner and read-only both have Glob access for file discovery
+3. Bootstrap agent denies dangerous bash patterns (rm -rf /, etc.)
+4. Write and Edit default to "ask" at global level for safety
+5. Research assistant has WebFetch set to "ask" for user consent
 
 ---
 
