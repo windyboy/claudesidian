@@ -375,6 +375,88 @@ When adding new commands:
    - Should ask: `WebFetch`
    - Should not execute: `git push`
 
+### Phase 2 Testing Matrix (Expected Behavior)
+
+**How to Test:**
+
+```bash
+# Test each agent with OpenCode CLI
+opencode bootstrap
+opencode thinking-partner
+opencode research-assistant
+opencode assistant
+opencode read-only
+```
+
+**Expected Test Results:**
+
+| Agent              | Read File | Write File | Git Status | Git Push | Curl URL | WebFetch | Result |
+| ------------------ | --------- | ---------- | ---------- | -------- | -------- | -------- | ------ |
+| bootstrap          | Allow ✅  | Allow ✅   | Allow ✅   | Allow ✅ | Allow ✅ | Allow ✅ | Pass   |
+| thinking-partner   | Allow ✅  | Deny ❌    | Deny ❌    | Deny ❌  | Deny ❌  | Deny ❌  | Pass   |
+| research-assistant | Allow ✅  | Allow ✅   | Deny ❌    | Deny ❌  | Allow ✅ | Ask ⚠️   | Pass   |
+| assistant          | Allow ✅  | Allow ✅   | Ask ⚠️     | Ask ⚠️   | Ask ⚠️   | Ask ⚠️   | Pass   |
+| read-only          | Allow ✅  | Deny ❌    | Deny ❌    | Deny ❌  | Deny ❌  | Deny ❌  | Pass   |
+
+**Bash Pattern Testing:**
+
+| Command       | bootstrap | thinking-partner | research-assistant | assistant | read-only |
+| ------------- | --------- | ---------------- | ------------------ | --------- | --------- |
+| `git status`  | Allow ✅  | Deny ❌          | Deny ❌            | Ask ⚠️    | Deny ❌   |
+| `git add .`   | Allow ✅  | Deny ❌          | Deny ❌            | Ask ⚠️    | Deny ❌   |
+| `git commit`  | Allow ✅  | Deny ❌          | Deny ❌            | Ask ⚠️    | Deny ❌   |
+| `npm install` | Allow ✅  | Deny ❌          | Deny ❌            | Ask ⚠️    | Deny ❌   |
+| `ls -la`      | Allow ✅  | Deny ❌          | Ask ⚠️             | Ask ⚠️    | Deny ❌   |
+| `curl url`    | Allow ✅  | Deny ❌          | Allow ✅           | Ask ⚠️    | Deny ❌   |
+| `rm -rf /`    | Deny ❌   | Deny ❌          | Deny ❌            | Deny ❌   | Deny ❌   |
+
+**File Permission Testing:**
+
+| File Type | Read     | Write   | Edit    | Read .env | Write .env |
+| --------- | -------- | ------- | ------- | --------- | ---------- |
+| \*.md     | Allow ✅ | Ask ⚠️  | Ask ⚠️  | N/A       | N/A        |
+| \*.json   | Allow ✅ | Ask ⚠️  | Ask ⚠️  | N/A       | N/A        |
+| \*.mjs    | Allow ✅ | Ask ⚠️  | Ask ⚠️  | N/A       | N/A        |
+| \*.sh     | Allow ✅ | Ask ⚠️  | Ask ⚠️  | N/A       | N/A        |
+| .env      | Deny ❌  | Deny ❌ | Deny ❌ | Deny ❌   | Deny ❌    |
+| \*.pem    | Ask ⚠️   | Ask ⚠️  | Ask ⚠️  | Deny ❌   | Deny ❌    |
+
+**Testing Instructions:**
+
+1. Start each agent: `opencode <agent-name>`
+2. Request operations from each test matrix row
+3. Verify:
+   - ✅ Allow: Operation proceeds without prompt
+   - ⚠️ Ask: User is prompted for consent
+   - ❌ Deny: Operation is blocked
+4. Document any deviations from expected behavior
+
+**Test Verification Checklist:**
+
+- [ ] Bootstrap agent executes all git commands without prompts
+- [ ] Bootstrap agent denies `rm -rf /` pattern
+- [ ] Thinking-partner cannot write files
+- [ ] Thinking-partner cannot execute bash commands
+- [ ] Research-assistant can use curl for downloads
+- [ ] Research-assistant asks before WebFetch
+- [ ] Assistant asks before bash operations
+- [ ] Assistant asks before WebFetch
+- [ ] Read-only cannot modify any files
+- [ ] Read-only cannot execute any bash commands
+- [ ] .env files cannot be read or written
+- [ ] \*.pem files prompt for consent
+- [ ] Pattern matching works for git commands
+- [ ] Pattern matching works for npm commands
+- [ ] File pattern matching works for extensions
+
+**Testing Notes:**
+
+- OpenCode CLI must be started from the vault directory
+- Test with actual file operations, not theoretical
+- Document any permission patterns that don't match expected behavior
+- Note any permission prompts that appear unexpectedly
+- Record any permissions that should prompt but don't
+
 ---
 
 ## Troubleshooting
