@@ -4,6 +4,28 @@ Helper scripts for vault automation and web content capture.
 
 ## Available Scripts
 
+### Testing Scripts
+
+**OpenCode SDK Migration Testing:**
+
+- `test-opencode-connection.sh` - Tests OpenCode server connection and health
+  ```bash
+  bash .scripts/test-opencode-connection.sh [server-url]
+  # Example: bash .scripts/test-opencode-connection.sh http://localhost:4096
+  ```
+
+- `verify-opencode-migration.sh` - Verifies migration implementation is complete
+  ```bash
+  bash .scripts/verify-opencode-migration.sh
+  # Checks that all migration fixes are in place
+  ```
+
+**Usage via npm/pnpm:**
+```bash
+pnpm test:verify      # Verify migration implementation
+pnpm test:connection  # Test server connection
+```
+
 ### Attachment Management
 
 These are primarily called via npm/pnpm commands in package.json:
