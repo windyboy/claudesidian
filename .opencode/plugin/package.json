@@ -1,0 +1,21 @@
+{
+  "name": "opencode-session-hooks",
+  "version": "1.0.0",
+  "description": "Session hooks plugin for OpenCode - handles first-run detection and update checking",
+  "type": "module",
+  "main": "session-hooks.ts",
+  "exports": {
+    ".": "./session-hooks.ts"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "session",
+    "hooks"
+  ],
+  "author": "Claudesidian",
+  "license": "MIT",
+  "peerDependencies": {
+    "@opencode-ai/plugin": "^1.0.0"
+  }
+}
