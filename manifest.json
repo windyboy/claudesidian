@@ -1,0 +1,12 @@
+{
+	"id": "claudesidian",
+	"name": "Claudesidian",
+	"version": "0.13.1",
+	"minAppVersion": "1.0.0",
+	"description": "AI-powered second brain using OpenCode - Claude Code + Obsidian integration",
+	"author": "Claudesidian Team",
+	"authorUrl": "https://github.com/heyitsnoah/claudesidian",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
+

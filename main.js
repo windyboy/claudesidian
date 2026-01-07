@@ -24361,6 +24361,30 @@ User: ${prompt}` : historyContext : prompt;
           return;
         }
 
+        // Check for tool-related events
+        if (event.type === "tool.use" || event.type === "tool_use") {
+          const toolEvent = event.properties;
+          yield {
+            type: "tool_use",
+            id: toolEvent.id || toolEvent.tool_use_id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
+            name: toolEvent.name || "unknown",
+            input: toolEvent.input || {},
+            parentToolUseId: toolEvent.parent_tool_use_id || null,
+          };
+          continue;
+        }
+        
+        if (event.type === "tool.result" || event.type === "tool_result") {
+          const resultEvent = event.properties;
+          yield {
+            type: "tool_result",
+            id: resultEvent.tool_use_id || resultEvent.id || null,
+            content: typeof resultEvent.result === "string" ? resultEvent.result : JSON.stringify(resultEvent.result || "", null, 2),
+            isError: resultEvent.is_error || false,
+          };
+          continue;
+        }
+        
         if (event.type === "message.updated") {
           const message = event.properties.info;
           if (message.role === "assistant" && message.id !== lastMessageId) {
@@ -24372,6 +24396,38 @@ User: ${prompt}` : historyContext : prompt;
                   yield { type: "text", content: part.text, parentToolUseId: null };
                 } else if (part.type === "reasoning") {
                   yield { type: "thinking", content: part.text, parentToolUseId: null };
+                } else if (part.type === "tool_use" || part.tool_use_id) {
+                  // Handle tool_use parts from OpenCode SDK
+                  const toolPart = part;
+                  yield {
+                    type: "tool_use",
+                    id: toolPart.tool_use_id || toolPart.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
+                    name: toolPart.name || "unknown",
+                    input: toolPart.input || {},
+                    parentToolUseId: null,
+                  };
+                } else if (part.type === "tool_result") {
+                  // Handle tool_result parts
+                  const resultPart = part;
+                  yield {
+                    type: "tool_result",
+                    id: resultPart.tool_use_id || resultPart.id || null,
+                    content: typeof resultPart.result === "string" ? resultPart.result : JSON.stringify(resultPart.result || resultPart.content || "", null, 2),
+                    isError: resultPart.is_error || false,
+                  };
+                }
+              }
+              
+              // Check for toolCalls in message data (alternative structure)
+              if (messageResult.data.toolCalls && Array.isArray(messageResult.data.toolCalls)) {
+                for (const toolCall of messageResult.data.toolCalls) {
+                  yield {
+                    type: "tool_use",
+                    id: toolCall.id || toolCall.tool_use_id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
+                    name: toolCall.name || "unknown",
+                    input: toolCall.input || {},
+                    parentToolUseId: null,
+                  };
                 }
               }
               if (message.tokens) {
