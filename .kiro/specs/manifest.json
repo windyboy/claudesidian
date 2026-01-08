@@ -1,0 +1,16 @@
+{
+  "specs": [
+    {
+      "id": "claudesidian-opencode-migration",
+      "title": "Claudesidian OpenCode Migration Specification",
+      "file": "CLAUDESIDIAN-OPENCODE-SPEC.md",
+      "status": "draft",
+      "version": "1.0",
+      "description": "Complete implementation specification for migrating Claudesidian from a monolithic Obsidian plugin to a distributed OpenCode-based architecture.",
+      "tags": ["architecture", "migration", "opencode", "plugins", "security"],
+      "lastUpdated": "2026-01-08"
+    }
+  ],
+  "version": "1.0",
+  "lastUpdated": "2026-01-08"
+}

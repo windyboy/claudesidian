@@ -1,0 +1,63 @@
+{
+  "planId": "plan_1767870911128_9z0lscnrz",
+  "sessionId": "session_107",
+  "status": "draft",
+  "plan": {
+    "title": "Plan 2",
+    "description": "Second plan",
+    "steps": [
+      {
+        "id": "step_001",
+        "title": "Analyze Requirements",
+        "description": "Analyze the requirements: Req 2",
+        "tool": "analyze_requirements",
+        "parameters": {
+          "requirements": [
+            "Req 2"
+          ]
+        },
+        "dependencies": []
+      },
+      {
+        "id": "step_002",
+        "title": "Create Detailed Plan",
+        "description": "Create a detailed implementation plan based on analysis",
+        "tool": "create_detailed_plan",
+        "parameters": {
+          "title": "Plan 2",
+          "description": "Second plan",
+          "constraints": []
+        },
+        "dependencies": [
+          "step_001"
+        ]
+      },
+      {
+        "id": "step_003",
+        "title": "Implementation Step 1",
+        "description": "Execute implementation step 1 of the plan",
+        "tool": "execute_implementation_step",
+        "parameters": {
+          "stepNumber": 1
+        },
+        "dependencies": [
+          "step_002"
+        ]
+      },
+      {
+        "id": "step_004",
+        "title": "Validate Implementation",
+        "description": "Validate that the implementation meets all requirements",
+        "tool": "validate_implementation",
+        "parameters": {
+          "requirements": [
+            "Req 2"
+          ]
+        },
+        "dependencies": [
+          "step_003"
+        ]
+      }
+    ]
+  }
+}

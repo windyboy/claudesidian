@@ -1,0 +1,11 @@
+{
+  "specs": {
+    "directory": ".kiro/specs",
+    "enabled": true,
+    "autoIndex": true
+  },
+  "steering": {
+    "directory": ".kiro/steering",
+    "enabled": true
+  }
+}

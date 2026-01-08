@@ -1,21 +1,42 @@
 {
-  "name": "opencode-session-hooks",
+  "name": "opencode-claudesidian-plugins",
   "version": "1.0.0",
-  "description": "Session hooks plugin for OpenCode - handles first-run detection and update checking",
+  "description": "OpenCode plugins for Claudesidian - modular plugin system for AI-assisted note-taking",
   "type": "module",
   "main": "session-hooks.ts",
   "exports": {
-    ".": "./session-hooks.ts"
+    ".": "./session-hooks.ts",
+    "./types": "./types.ts",
+    "./plugin-loader": "./plugin-loader.ts"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint ."
   },
   "keywords": [
     "opencode",
     "plugin",
-    "session",
-    "hooks"
+    "claudesidian",
+    "ai",
+    "obsidian",
+    "property-based-testing"
   ],
   "author": "Claudesidian",
   "license": "MIT",
   "peerDependencies": {
     "@opencode-ai/plugin": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "fast-check": "^3.15.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
   }
 }

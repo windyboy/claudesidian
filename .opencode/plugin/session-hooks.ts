@@ -2,22 +2,43 @@
 // Replaces Claude Code hooks system with OpenCode plugin system
 
 import type { Plugin } from "@opencode-ai/plugin";
+import { events, EventScope } from './event-system';
 
-export const sessionHooksPlugin: Plugin = async ({ client, $, directory }) => {
+export const sessionHooksPlugin: Plugin = async ({ client, $, directory }: any) => {
   return {
-    event: async ({ event }) => {
+    event: async ({ event }: any) => {
       // Handle session created event
       if (event.type === "session.created") {
         console.error("[SessionHooks] Session started");
 
         try {
+          // Emit session created event to our event system
+          await events.emitSession('session.created', { 
+            sessionId: event.sessionId || 'unknown',
+            directory,
+            timestamp: Date.now()
+          }, event.sessionId || 'unknown');
+
           // First-run detection and welcome message
           await checkFirstRun($, directory);
 
           // Update checking
           await checkUpdates($);
+          
+          // Emit session ready event
+          await events.emitSession('session.ready', {
+            sessionId: event.sessionId || 'unknown',
+            directory
+          }, event.sessionId || 'unknown');
+          
         } catch (error) {
           console.error("[SessionHooks] Error:", error);
+          
+          // Emit session error event
+          await events.emitSession('session.error', {
+            sessionId: event.sessionId || 'unknown',
+            error: error instanceof Error ? error.message : String(error)
+          }, event.sessionId || 'unknown');
         }
       }
     },

@@ -22,6 +22,7 @@ tests:
 - Test MCP servers: `node .claude/mcp-servers/<server-name>.mjs`
 - Test shell scripts: `bash .scripts/<script-name>.sh`
 - Test commands: Use OpenCode to execute `/command-name` interactively
+- Test Memvid MCP server: Use `mcp_memvid_memvid_get_status()` to verify connection
 
 ## Code Style Guidelines
 
@@ -168,6 +169,16 @@ Obsidian vault using PARA method:
 - Check in code: `const apiKey = process.env.GEMINI_API_KEY`
 - Fail with helpful message if missing required env vars
 
+### Memory Management with Memvid
+
+This project uses Memvid MCP server for persistent memory and context preservation:
+
+- **Project Memory**: `opendian.mv2` - Long-term project knowledge and decisions
+- **Session Memory**: `session-YYYY-MM-DD.mv2` - Daily session context
+- **Context Memory**: `context-current.mv2` - Active working context
+- **Steering Integration**: Memory usage guidelines are automatically loaded via `.kiro/steering/memvid-usage.md`
+- **Consistent Tagging**: Use `type`, `topic`, `status`, `priority` tags for organization
+
 ## Common Patterns
 
 ### MCP Server Structure
@@ -247,12 +258,24 @@ Permissions are configured:
 
 See `PERMISSION-SYSTEM.md` for complete documentation.
 
+### Steering System
+
+Kiro uses a steering system to provide automatic guidance to agents:
+
+- **Location**: `.kiro/steering/` directory
+- **Format**: Markdown files with frontmatter
+- **Inclusion Types**:
+  - `always`: Automatically included in all sessions (default)
+  - `fileMatch`: Included when specific files are in context
+  - `manual`: Included only when referenced with `#` in chat
+- **Current Steering Files**:
+  - `memvid-usage.md`: Memory management guidelines for Memvid MCP server
+- **File References**: Use `#[[file:<relative_file_name>]]` to include other files
+
 ### Plugin System
 
 OpenCode plugins replace Claude Code hooks:
-
 - **Location**: `.opencode/plugin/` directory
-- **Format**: TypeScript files exporting a Plugin function
 - **Events**: Handle `session.created` and other events
 - **API**: Use `$` API for shell commands
 

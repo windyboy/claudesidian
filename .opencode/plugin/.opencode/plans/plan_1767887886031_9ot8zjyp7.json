@@ -1,0 +1,77 @@
+{
+  "planId": "plan_1767887886031_9ot8zjyp7",
+  "sessionId": "session_456",
+  "status": "draft",
+  "plan": {
+    "title": "Implementation Plan",
+    "description": "Implement a new feature",
+    "steps": [
+      {
+        "id": "step_001",
+        "title": "Analyze Requirements",
+        "description": "Analyze the requirements: Feature A, Feature B",
+        "tool": "analyze_requirements",
+        "parameters": {
+          "requirements": [
+            "Feature A",
+            "Feature B"
+          ]
+        },
+        "dependencies": []
+      },
+      {
+        "id": "step_002",
+        "title": "Create Detailed Plan",
+        "description": "Create a detailed implementation plan based on analysis",
+        "tool": "create_detailed_plan",
+        "parameters": {
+          "title": "Implementation Plan",
+          "description": "Implement a new feature",
+          "constraints": []
+        },
+        "dependencies": [
+          "step_001"
+        ]
+      },
+      {
+        "id": "step_003",
+        "title": "Implementation Step 1",
+        "description": "Execute implementation step 1 of the plan",
+        "tool": "execute_implementation_step",
+        "parameters": {
+          "stepNumber": 1
+        },
+        "dependencies": [
+          "step_002"
+        ]
+      },
+      {
+        "id": "step_004",
+        "title": "Implementation Step 2",
+        "description": "Execute implementation step 2 of the plan",
+        "tool": "execute_implementation_step",
+        "parameters": {
+          "stepNumber": 2
+        },
+        "dependencies": [
+          "step_003"
+        ]
+      },
+      {
+        "id": "step_005",
+        "title": "Validate Implementation",
+        "description": "Validate that the implementation meets all requirements",
+        "tool": "validate_implementation",
+        "parameters": {
+          "requirements": [
+            "Feature A",
+            "Feature B"
+          ]
+        },
+        "dependencies": [
+          "step_004"
+        ]
+      }
+    ]
+  }
+}

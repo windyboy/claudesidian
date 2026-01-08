@@ -205,10 +205,22 @@ export class OpenCodeClient {
       // Await event stream and iterate
       const eventStream = await eventStreamPromise
       let lastMessageId: string | null = null
+      let hasReceivedContent = false
+      
       for await (const event of eventStream as any) {
         if (options.abortController?.signal.aborted) {
           yield { type: 'done' }
           return
+        }
+
+        // Handle permission requests
+        if (event.type === 'permission.request') {
+          yield {
+            type: 'blocked',
+            content: 'Waiting for permission approval...',
+            sessionId: sessionId || this.currentSessionId!,
+          }
+          continue
         }
 
         // Check for tool-related events
@@ -239,10 +251,22 @@ export class OpenCodeClient {
           continue
         }
 
+        // Handle thinking/reasoning
+        if (event.type === 'reasoning' || event.type === 'thinking') {
+          const reasoningEvent = (event as any).properties || event
+          yield {
+            type: 'thinking',
+            content: reasoningEvent.content || reasoningEvent.text || '',
+            sessionId: sessionId || this.currentSessionId!,
+          }
+          continue
+        }
+
         if (event.type === 'message.updated') {
           const message = event.properties.info
           if (message.role === 'assistant' && message.id !== lastMessageId) {
             lastMessageId = message.id
+            hasReceivedContent = true
 
             // Get message parts
             const messageResult = await this.client!.session.message({
@@ -331,6 +355,12 @@ export class OpenCodeClient {
           }
         }
       }
+
+      // If we haven't received any content, yield done
+      if (!hasReceivedContent) {
+        yield { type: 'done' }
+      }
+      
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {

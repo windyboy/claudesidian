@@ -1,0 +1,68 @@
+{
+  "planId": "plan_1767870594382_k69mj4d55",
+  "sessionId": "session_103",
+  "status": "executing",
+  "plan": {
+    "title": "Execution Test Plan",
+    "description": "Test plan execution",
+    "steps": [
+      {
+        "id": "step_001",
+        "title": "Analyze Requirements",
+        "description": "Analyze the requirements: Test requirement",
+        "tool": "analyze_requirements",
+        "parameters": {
+          "requirements": [
+            "Test requirement"
+          ]
+        },
+        "dependencies": []
+      },
+      {
+        "id": "step_002",
+        "title": "Create Detailed Plan",
+        "description": "Create a detailed implementation plan based on analysis",
+        "tool": "create_detailed_plan",
+        "parameters": {
+          "title": "Execution Test Plan",
+          "description": "Test plan execution",
+          "constraints": []
+        },
+        "dependencies": [
+          "step_001"
+        ]
+      },
+      {
+        "id": "step_003",
+        "title": "Implementation Step 1",
+        "description": "Execute implementation step 1 of the plan",
+        "tool": "execute_implementation_step",
+        "parameters": {
+          "stepNumber": 1
+        },
+        "dependencies": [
+          "step_002"
+        ]
+      },
+      {
+        "id": "step_004",
+        "title": "Validate Implementation",
+        "description": "Validate that the implementation meets all requirements",
+        "tool": "validate_implementation",
+        "parameters": {
+          "requirements": [
+            "Test requirement"
+          ]
+        },
+        "dependencies": [
+          "step_003"
+        ]
+      }
+    ]
+  },
+  "execution": {
+    "currentStep": 0,
+    "startTime": 1767870594385,
+    "results": []
+  }
+}
